@@ -65,6 +65,7 @@ class Rotor_state:
         self.s_escape_ascending = s_escape_ascending
         self.g_line_ascending = g_line_ascending
 
+
     def __eq__(self, other):
         if not isinstance(other, Rotor_state):
             return NotImplemented
@@ -208,7 +209,7 @@ def isFinal(state: Rotor_state, final: Rotor_state):
         return True
     return False
 
-# ======= DEPTH FIRST SEARCH ======= #
+# ======= BREADTH FIRST SEARCH ======= #
 
 class StateTracker:
     state: Rotor_state
@@ -218,7 +219,7 @@ class StateTracker:
         self.state = state
         self.prevMoves = prevMoves
 
-def dfs(initial: Rotor_state, final: Rotor_state):
+def bfs(initial: Rotor_state, final: Rotor_state):
 
     visited_states = {}
     queue: deque[StateTracker] = deque()
@@ -271,17 +272,17 @@ def dfs(initial: Rotor_state, final: Rotor_state):
 def solve_rotor(initial: Rotor_state, final: Rotor_state):
     base_state = Rotor_state(Edge.E34, Line.L25, Edge.E34, Line.L45, False, True, True, False, False)
 
-    full_initial = dfs(base_state, initial).state
+    full_initial = bfs(base_state, initial).state
     if(full_initial == False):
         return False
     
-    return dfs(full_initial, final)
+    return bfs(full_initial, final)
 
 # ============ TESTING ============ #
 
 # I don't actually know whether g and s values are ascending (but it doesn't matter)
 final_state = Rotor_state(Edge.E12, Line.L05, Edge.E12, Line.L05, True, True, True, True, True)
-current_state = Rotor_state(Edge.E12, Line.L25, Edge.E12, Line.L25, True, True, True, True, True)
+current_state = Rotor_state(Edge.E56, Line.L45, Edge.E56, Line.L05, True, True, True, True, True)
 
 solution = solve_rotor(current_state, final_state)
 print(solution.prevMoves)
